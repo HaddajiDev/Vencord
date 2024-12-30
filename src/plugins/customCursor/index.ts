@@ -75,90 +75,42 @@ export default definePlugin({
     authors: [Devs.HaddajiDev],
 
     start() {
+        const linkTag = document.createElement("link");
+        linkTag.rel = "stylesheet";
+        linkTag.href = "./style.css";
+        document.head.appendChild(linkTag);
+
         const cursorEl = document.createElement("div");
         cursorEl.id = "customCursor";
         document.body.appendChild(cursorEl);
 
-        const styleTag = document.createElement("style");
-        styleTag.id = "customCursorStyles";
-        styleTag.innerHTML = `
-            * { cursor: none !important; }
-            #customCursor { z-index: 9999 !important; }
-        `;
-        document.head.appendChild(styleTag);
+        const selectedCursorURL = settings.store.DefaultCursors;
+        let cursorURL = selectedCursorURL;
 
-        const updateCursor = () => {
-            const selectedCursorURL = settings.store.DefaultCursors;
-            let cursorURL = selectedCursorURL;
+        if (selectedCursorURL === "custom") {
+            cursorURL = settings.store.customCursorURL && settings.store.customCursorURL.trim()
+                ? settings.store.customCursorURL
+                : DEFAULT_CURSOR_URL;
+        } else if (!cursorURL) {
+            cursorURL = DEFAULT_CURSOR_URL;
+        }
 
-            if (selectedCursorURL === "custom") {
-                cursorURL = settings.store.customCursorURL && settings.store.customCursorURL.trim()
-                    ? settings.store.customCursorURL
-                    : DEFAULT_CURSOR_URL;
-            }
-            else if (!cursorURL) {
-                cursorURL = DEFAULT_CURSOR_URL;
-            }
+        cursorEl.style.width = settings.store.cursorSize + "px";
+        cursorEl.style.height = settings.store.cursorSize + "px";
+        cursorEl.style.backgroundImage = `url(${cursorURL})`;
 
-            const cursorSize = settings.store.cursorSize;
-
-            Object.assign(cursorEl.style, {
-                width: `${cursorSize}px`,
-                height: `${cursorSize}px`,
-                position: "fixed",
-                pointerEvents: "none",
-                backgroundImage: `url(${DEFAULT_CURSOR_URL})`,
-                backgroundSize: "contain",
-                zIndex: "9999",
-                transform: "translate(-50%, -50%)",
-            });
-
-            const img = new Image();
-
-            img.onload = () => {
-                Object.assign(cursorEl.style, {
-                    backgroundImage: `url(${cursorURL})`,
-                });
-            };
-
-            img.onerror = () => {
-                Object.assign(cursorEl.style, {
-                    backgroundImage: `url(${DEFAULT_CURSOR_URL})`,
-                });
-            };
-
-            img.src = cursorURL;
-
-            //check for invalid links
-            setTimeout(() => {
-                if (img.complete === false) {
-                    Object.assign(cursorEl.style, {
-                        backgroundImage: `url(${DEFAULT_CURSOR_URL})`,
-                    });
-                }
-            }, 5000);
-        };
-
-        const updateCursorPosition = (event) => {
-            cursorEl.style.left = `${event.clientX}px`;
-            cursorEl.style.top = `${event.clientY}px`;
-        };
-
-        updateCursor();
-
-        document.addEventListener("mousemove", updateCursorPosition);
+        document.addEventListener("mousemove", function (event) {
+            cursorEl.style.left = event.clientX + "px";
+            cursorEl.style.top = event.clientY + "px";
+        });
 
         this._cursorEl = cursorEl;
-        this._updateCursorPosition = updateCursorPosition;
-        this._styleTag = styleTag;
+        this._cssLink = linkTag;
     },
 
     stop() {
         document.body.style.cursor = "default";
-        this._cursorEl?.remove();
-        if (this._updateCursorPosition) {
-            document.removeEventListener("mousemove", this._updateCursorPosition);
-        }
-        this._styleTag?.remove();
+        this._cssLink.remove();
+        this._cursorEl.remove();
     },
 });

@@ -19,6 +19,7 @@
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { definePluginSettings } from "@api/Settings";
+import style from './style.css';
 
 const DEFAULT_CURSOR_URL = "https://savage-files-cdn.vercel.app/files/inspect/67713414ee4e8c87b96a0ffd";
 const WHITE_CURSOR_URL = "https://savage-files-cdn.vercel.app/files/inspect/67714b81fd5c6c65af595fe6";
@@ -76,8 +77,7 @@ export default definePlugin({
 
     start() {
         const linkTag = document.createElement("link");
-        linkTag.rel = "stylesheet";
-        linkTag.href = "./style.css";
+        linkTag.href = style;
         document.head.appendChild(linkTag);
 
         const cursorEl = document.createElement("div");

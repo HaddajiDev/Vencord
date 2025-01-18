@@ -112,5 +112,6 @@ export default definePlugin({
         document.body.style.cursor = "default";
         this._cssLink.remove();
         this._cursorEl.remove();
+
     },
 });

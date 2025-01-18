@@ -2,6 +2,8 @@
     cursor: none !important;
 }
 
+
+
 #customCursor {
     z-index: 9999;
     position: fixed;

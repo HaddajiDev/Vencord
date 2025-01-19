@@ -18,11 +18,6 @@ export const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         default: true,
     },
-    fakeCam: {
-        description: "Make everyone believe your camera is on (even if it's not)",
-        type: OptionType.BOOLEAN,
-        default: false,
-    },
     muteOnFakeDeafen: {
         description: "Make your mic mute when you fake deafen (less suspicious)",
         type: OptionType.BOOLEAN,

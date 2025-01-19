@@ -1,9 +1,3 @@
-/*
- * Vencord, a Discord client mod
- * Copyright (c) 2024 Vendicated and contributors
- * SPDX-License-Identifier: GPL-3.0-or-later
- */
-
 import { disableStyle, enableStyle } from "@api/Styles";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
@@ -14,18 +8,13 @@ import style from "./style.css";
 
 export let faked = false;
 
-const debug = true;
-function logDebug(message: string) {
-    if (debug) console.log("[FakeVoiceOptions]", message);
-}
-
 function mute() {
     const muteBtn = document.querySelector('[aria-label="Mute"]') as HTMLElement;
     if (muteBtn) {
         muteBtn.click();
-        logDebug("Mute button clicked.");
+
     } else {
-        console.error("[FakeVoiceOptions] Mute button not found.");
+        console.error("Error");
     }
 }
 
@@ -33,14 +22,11 @@ function deafen() {
     const deafenBtn = document.querySelector('[aria-label="Deafen"]') as HTMLElement;
     if (deafenBtn) {
         deafenBtn.click();
-        logDebug("Deafen button clicked.");
+
     } else {
-        console.error("[FakeVoiceOptions] Deafen button not found.");
+        console.error("Error");
     }
 }
-
-const Button = findByCodeLazy("Button.Sizes.NONE,disabled:");
-
 const toggleFakeVoiceOptions = () => {
     try {
         faked = !faked;
@@ -52,15 +38,14 @@ const toggleFakeVoiceOptions = () => {
             setTimeout(mute, 350);
         }
 
-        logDebug(`Fake Voice Options toggled: ${faked}`);
     } catch (error) {
-        console.error("[FakeVoiceOptions] Error toggling options:", error);
+        console.error(error);
     }
 };
 
 export default definePlugin({
-    name: "FakeVoiceOptions",
-    description: "Fake mute, deafen, and camera for VCs",
+    name: "FakeMuteAndDeafen",
+    description: "Fake mute and deafen for VCs",
     authors: [Devs.HaddajiDev],
     patches: [
         {
@@ -73,7 +58,7 @@ export default definePlugin({
         {
             find: "}voiceStateUpdate(",
             replacement: {
-                match: /self_mute:([^,]+),self_deaf:([^,]+),self_video:([^,]+)/,
+                match: /self_mute:([^,]+),self_deaf:([^,]+)/,
                 replace: "self_mute:$self.toggle($1,'fakeMute'),self_deaf:$self.toggle($2,'fakeDeafen')",
             },
         },
@@ -90,10 +75,8 @@ export default definePlugin({
         m_button.innerHTML = "Click me";
         document.body.appendChild(m_button);
         enableStyle(style);
-        logDebug("FakeVoiceOptions plugin started.");
     },
     stop() {
         disableStyle(style);
-        logDebug("FakeVoiceOptions plugin stopped.");
     },
 });

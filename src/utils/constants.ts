@@ -16,9 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-export const WEBPACK_CHUNK = "webpackChunkdiscord_app";
 export const REACT_GLOBAL = "Vencord.Webpack.Common.React";
+export const VENBOT_USER_ID = "1017176847865352332";
+export const VENCORD_GUILD_ID = "1015060230222131221";
+export const DONOR_ROLE_ID = "1042507929485586532";
+export const CONTRIB_ROLE_ID = "1026534353167208489";
+export const REGULAR_ROLE_ID = "1026504932959977532";
 export const SUPPORT_CHANNEL_ID = "1026515880080842772";
+export const SUPPORT_CATEGORY_ID = "1108135649699180705";
+export const KNOWN_ISSUES_CHANNEL_ID = "1222936386626129920";
 
 export interface Dev {
     name: string;
@@ -579,10 +585,17 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "jamesbt365",
         id: 158567567487795200n,
     },
+<<<<<<< HEAD
     HaddajiDev: {
         name: "HaddajiDev",
         id: 767083087338274866n,
     }
+=======
+    samsam: {
+        name: "samsam",
+        id: 836452332387565589n,
+    },
+>>>>>>> d753478097294744398f84bb8c28fd6274b8195c
 } satisfies Record<string, Dev>);
 
 // iife so #__PURE__ works correctly

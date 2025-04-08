@@ -82,6 +82,8 @@ function makeShortcuts() {
         wp: Webpack,
         wpc: { getter: () => Webpack.cache },
         wreq: { getter: () => Webpack.wreq },
+        wpPatcher: { getter: () => Vencord.WebpackPatcher },
+        wpInstances: { getter: () => Vencord.WebpackPatcher.allWebpackInstances },
         wpsearch: search,
         wpex: extract,
         wpexs: (code: string) => extract(findModuleId(code)!),
@@ -151,13 +153,16 @@ function makeShortcuts() {
         openModal: { getter: () => ModalAPI.openModal },
         openModalLazy: { getter: () => ModalAPI.openModalLazy },
 
-        Stores: {
-            getter: () => Object.fromEntries(
-                Common.Flux.Store.getAll()
-                    .map(store => [store.getName(), store] as const)
-                    .filter(([name]) => name.length > 1)
-            )
-        }
+        Stores: Webpack.fluxStores,
+
+        // e.g. "2024-05_desktop_visual_refresh", 0
+        setExperiment: (id: string, bucket: number) => {
+            Common.FluxDispatcher.dispatch({
+                type: "EXPERIMENT_OVERRIDE_BUCKET",
+                experimentId: id,
+                experimentBucket: bucket,
+            });
+        },
     };
 }
 
